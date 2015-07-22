@@ -1,7 +1,8 @@
 # How to make a simple HTML5 Canvas game
 
-Build your first HTML5 Canvas game in no time! [Read the whole article here.](http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/)
+GOAL: 
+1\Learning how to build a moving object with uniform speed independent from different time interval
+2\Combined with particles effect created in last repo
+3\Familiar with object and prototype programming in javascript
 
-* Subscribe to the [Lost Decade Games blog](http://www.lostdecadegames.com/rss.xml)
-* Listen to [Lostcast](http://www.lostdecadegames.com/lostcast/), the indie game dev podcast
-* Follow us [@LostDecadeGames](https://twitter.com/LostDecadeGames)
+* Follow my recent activity [@Chocoluffy](http://weibo.com/3320740021/profile?topnav=1&wvr=6#_rnd1437528007165)
