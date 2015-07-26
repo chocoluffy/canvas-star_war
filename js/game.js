@@ -74,15 +74,17 @@ var init= function(){
 
 // Update game objects
 var update = function (modifier) {
-	if (32 in keysDown) {
+
+	//create meteors
+	// createMeteors();
+
+	if (32 in keysDown) { // holding space
 		createRays(hero.x, hero.y);
-		// rays
-		var k=rays.length;
-		while(k--){
-			rays[k].draw();
-			rays[k].update(k);
 	}
+	else{
+
 	}
+
 	if (38 in keysDown) { // Player holding up
 		hero.y -= hero.speed * modifier;
 	}
@@ -97,26 +99,37 @@ var update = function (modifier) {
 	}
 
 	// Are they touching?
+	// 1\rays touches monster
 	var flag=false;
 	if(rays.length>0){
-		if(rays[0].x<=(monster.x+50)
-			&& monster.x<=(rays[0].x+50)
-			&& rays[0].y<=(monster.y+50)
-			&& monster.y<=(rays[0].y+50) 
+		for(var i=0; i<rays.length; i++){
+			if(rays[i].x<=(monster.x+MONSTER_WIDTH)
+			&& monster.x<=(rays[i].x+MONSTER_WIDTH)
+			&& rays[i].y<=(monster.y+MONSTER_WIDTH)
+			&& monster.y<=(rays[i].y+MONSTER_WIDTH) 
 			){
 			flag=true;
+			}
 		}
+		//bug就是出现在这里， 因为rays创建的时候只有一个rays[0]
+		//所以不应该只针对rays[0]检查， 而是要对所有的ray都进行距离检查
+		//但是这么做性能会差；
+		
 	}
 
+	//2\
+	// console.log("i need the flag: "+ flag);
+
 	if (
+		flag ||
 		hero.x <= (monster.x + MONSTER_WIDTH)
 		&& monster.x <= (hero.x + MONSTER_WIDTH)
 		&& hero.y <= (monster.y + MONSTER_WIDTH)
 		&& monster.y <= (hero.y + MONSTER_WIDTH)
-		|| flag
 	) {
-		createParticles(monster.x, monster.y);
+		createParticles(monster.x, monster.y, true);
 		++monstersCaught;
+		console.log(flag);
 		reset();
 	}
 };
@@ -135,8 +148,11 @@ var render = function () {
 
 	if (monsterReady) {
 		context.drawImage(monsterImage, monster.x, monster.y);
+		//monster首先new image然后设置src， 最后画出来
 	}
 	//Particles 由于canvas里面是越后面定义的变量， 在最上面， 会有覆盖， 所以应该在画出了背景颜色之后再画烟花
+	
+
 	var i=particles.length;
 	while(i--){
 		particles[i].draw();
@@ -150,19 +166,34 @@ var render = function () {
 		rays[j].update(j);
 	}
 
+	// //meteors
+	// var m=Meteors.length;
+	// while(m--){
+	// 	Meteors[m].draw();
+	// 	for(var q=0; q<Meteors.length; q++){
+	// 		context.drawImage(Meteors[q].image, Meteors[q].x, Meteors[q].y);
+	// 	}
+	// 	Meteors[m].update(m);
+	// }
+
 	// Score
+	drawScore();
+};
+
+var drawScore = function(){
 	context.fillStyle = "rgb(250, 250, 250)";
 	context.font = "24px Helvetica";
 	context.textAlign = "left";
 	context.textBaseline = "top";
-	context.fillText("Goblins caught: " + monstersCaught, 32, 32);
-};
+	context.fillText("Monster caught: " + monstersCaught, 32, 32);
+	context.fillText("Your bomb: " + Math.max(BOMB_NUMBER,0), 32, 70);
+}
 
 // The main game loop
 var main = function () {
 	var now = Date.now();
 	var delta = now - then;
-
+	//基于真实时间的运动， 而不是基于帧的运动
 	update(delta / 1000);
 	render();
 	hue +=0.5;
@@ -175,7 +206,7 @@ var main = function () {
 	// context.fillRect( 0, 0, canvas.width, canvas.height );
 	// change the composite operation back to our main mode
 	// lighter creates bright highlight points as the fireworks and particles overlap each other
-	context.globalCompositeOperation = 'lighter';
+	context.globalCompositeOperation='lighter';
 
 	then = now;
 

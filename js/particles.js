@@ -26,6 +26,7 @@
     
 var particles=[];
 var PARTICLE_NUMBER=30;
+var CEILLING_PARTICLE_NUMBER=10;
 var hue=120;
 
 function Particle(x, y){
@@ -46,9 +47,6 @@ function Particle(x, y){
     this.decay= random(0.015, 0.03);
 }
 
-function random( min, max ) {
-    return Math.random() * ( max - min ) + min;
-}
 
 Particle.prototype.update = function( index ) {
     // remove last item in coordinates array
@@ -73,6 +71,7 @@ Particle.prototype.draw= function(){
     //particle的画布状态：
     context.strokeStyle="hsla("+this.hue+ ", 100%,"+ this.brightness+ "%,"+this.alpha+")";
     context.lineWidth=2;
+    
     context.save();
     context.restore();
 
@@ -82,10 +81,17 @@ Particle.prototype.draw= function(){
     context.stroke();
 }
 
-function createParticles( x, y ) {
+function createParticles( x, y, ceilling ) {
     // increase the particle count for a bigger explosion, beware of the canvas performance hit with the increased particles though
-    var particleCount = PARTICLE_NUMBER;
+    var particleCount;
+    if(ceilling==true){
+        particleCount = PARTICLE_NUMBER;
+    }
+    else{
+        particleCount= CEILLING_PARTICLE_NUMBER;
+    }
     while( particleCount-- ) {
         particles.push( new Particle( x, y ) );
+        // console.log("particles:"+ particles.length);
     }
 }

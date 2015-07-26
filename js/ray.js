@@ -3,6 +3,8 @@ var hue=120;
 var RAY_NUMBER=1;
 var SHIP_WIDTH=64;
 var SHIP_HEIGHT=48;
+var BOMB_NUMBER=100;
+
 // var RAY_WIDTH=4;
 function ray(x, y){
 	this.x=x+SHIP_WIDTH/2;
@@ -29,16 +31,18 @@ ray.prototype.update= function(index){
 	// 	rays.splice(index, 1);
 	// }
 	if(this.y<=0){
+		createParticles(this.x, 0, false);
 		rays.splice(index, 1);
-		console.log(rays.length);
+		// console.log("rays:"+ rays.length);
 	}
 }
 
 ray.prototype.draw= function(){
 	//ray的画布状态：
-	var lineWidth=random(2,4);
+	var lineWidth=random(1,3);
 	context.lineWidth=lineWidth;
 	context.strokeStyle="hsla("+this.hue+", 100%,"+this.brightness+"%,"+this.alpha+")";
+
 	context.save();
 	context.restore();
 
@@ -49,8 +53,9 @@ ray.prototype.draw= function(){
 	context.stroke();
 }
 
-function createRays(x, y, modifier){
+function createRays(x, y){
 	var particleCount=RAY_NUMBER;
+	BOMB_NUMBER-= RAY_NUMBER;
 	while(particleCount--){
 		rays.push(new ray(x, y));
 	}
