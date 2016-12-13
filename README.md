@@ -1,3 +1,6 @@
+# Demo
+[demo page](http://chocoluffy.com/canvas-star_war/)
+
 # How to make a simple HTML5 Canvas game - star war
 
 1\ create independent obejects like particles, rays and meteors. 
